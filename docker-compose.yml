@@ -1,0 +1,146 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics status || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - rabbitnet
+
+  # 🐍 Consumer Python
+  consumer:
+    build:
+      context: ./consumer
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🐍 Producer Python
+  producer1:
+    build:
+      context: ./producer
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🟢 Producer Node.js
+  producer2:
+    build:
+      context: ./producer2
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🟡 Producer Go
+  producer3:
+    build:
+      context: ./producer3
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🔵 Producer Go (segundo)
+  producer4:
+    build:
+      context: ./producer4
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🟢 Consumer Node.js
+  consumer2:
+    build:
+      context: ./consumer2
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🟡 Consumer Go
+  consumer3:
+    build:
+      context: ./consumer3
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🔵 Consumer Java
+  consumer4:
+    build:
+      context: ./consumer4
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      RABBIT_HOST: rabbitmq
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+volumes:
+  rabbitmq-data:
+
+networks:
+  rabbitnet:
+    driver: bridge
