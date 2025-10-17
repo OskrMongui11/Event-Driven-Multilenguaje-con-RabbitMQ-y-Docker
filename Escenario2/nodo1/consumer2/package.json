@@ -1,0 +1,8 @@
+{
+  "name": "consumer2",
+  "version": "1.0.0",
+  "main": "consumer.js",
+  "dependencies": {
+    "amqplib": "^0.10.3"
+  }
+}

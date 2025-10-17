@@ -1,0 +1,125 @@
+services:
+  # 🐍 Producer Python
+  producer1_s2:
+    build:
+      context: ./producer
+    container_name: producer1_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2   # Broker en el nodo 2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🟢 Producer Node.js
+  producer2_s2:
+    build:
+      context: ./producer2
+    container_name: producer2_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🟡 Producer Go
+  producer3_s2:
+    build:
+      context: ./producer3
+    container_name: producer3_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🔵 Producer Go (segundo)
+  producer4_s2:
+    build:
+      context: ./producer4
+    container_name: producer4_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🐍 Consumer Python
+  consumer1_s2:
+    build:
+      context: ./consumer
+    container_name: consumer1_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🟢 Consumer Node.js
+  consumer2_s2:
+    build:
+      context: ./consumer2
+    container_name: consumer2_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🟡 Consumer Go
+  consumer3_s2:
+    build:
+      context: ./consumer3
+    container_name: consumer3_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🔵 Consumer Java
+  consumer4_s2:
+    build:
+      context: ./consumer4
+    container_name: consumer4_s2
+    environment:
+      - RABBIT_HOST=rabbitmq1_s2
+      - RABBIT_USER=user
+      - RABBIT_PASS=password
+    depends_on:
+      - placeholder_s2
+    networks:
+      - rabbitnet
+
+  # 🔸 Contenedor temporal (para dependencias internas)
+  placeholder_s2:
+    image: alpine
+    command: tail -f /dev/null
+    container_name: placeholder_s2
+    networks:
+      - rabbitnet
+
+# 🔗 Red compartida con el Nodo 2
+networks:
+  rabbitnet:
+    external: true

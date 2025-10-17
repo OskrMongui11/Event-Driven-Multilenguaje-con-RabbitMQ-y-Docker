@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  rabbitmq1_s2:
+    image: rabbitmq:3-management
+    container_name: rabbitmq1_s2
+    hostname: rabbitmq1
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_ERLANG_COOKIE=SECRETOCOMPARTIDO123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - rabbitnet
+    volumes:
+      - rabbitmq1-data:/var/lib/rabbitmq
+
+  rabbitmq2_s2:
+    image: rabbitmq:3-management
+    container_name: rabbitmq2_s2
+    hostname: rabbitmq2
+    depends_on:
+      - rabbitmq1_s2
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_ERLANG_COOKIE=SECRETOCOMPARTIDO123
+    networks:
+      - rabbitnet
+    volumes:
+      - rabbitmq2-data:/var/lib/rabbitmq
+    command: >
+      bash -c "
+      until rabbitmqctl node_health_check; do
+        echo 'Esperando a que rabbitmq1 esté disponible...';
+        sleep 3;
+      done &&
+      rabbitmqctl stop_app &&
+      rabbitmqctl join_cluster rabbit@rabbitmq1 &&
+      rabbitmqctl start_app &&
+      rabbitmqctl set_policy ha-all '.*' '{\"ha-mode\":\"all\"}' &&
+      tail -f /dev/null
+      "
+
+networks:
+  rabbitnet:
+    external: true
+
+volumes:
+  rabbitmq1-data:
+  rabbitmq2-data:
