@@ -64,6 +64,4 @@ Análisis: El despliegue centralizado sirve para validación rápida. Separar el
 - RabbitMQ demostró ser adecuado para integración asíncrona.
 - Escenarios distribuidos mostraron retos en redes y configuración de IPs.
 
-Notas finales
-- No se han incluido datos sensibles. Cambie credenciales para entornos de producción.
-- Para reproducir los escenarios, consulte los `docker-compose` en cada `Escenario*/` y adapte las variables de entorno `RABBITMQ_HOST`, `RABBIT_USER` y `RABBIT_PASS` según corresponda.
+

@@ -2,12 +2,6 @@
 
 Repositorio con ejemplos y despliegues Docker para un taller práctico sobre arquitectura orientada a eventos (Event-Driven) usando RabbitMQ como broker y servicios escritos en Python, Node.js, Go y Java.
 
-Contenido principal
-
-- `Escenario1/` — Despliegue centralizado (un solo nodo) con un `docker-compose.yml` que contiene RabbitMQ, productores y consumidores en varios lenguajes.
-- `Escenario2/` — Despliegue distribuido en 2 nodos (configuración por nodos con `docker-compose-node1.yml` y `docker-compose-node2.yml`).
-- `Escenario3/` — Despliegue distribuido en 3 nodos (arquitectura más separada con `docker-compose-node*.yml`).
-
 Lenguajes y componentes incluidos
 
 - Python: `producer/`, `producer2/`, `consumer/` (usa `pika`).
