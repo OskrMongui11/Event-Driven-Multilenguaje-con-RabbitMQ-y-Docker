@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  # 🟡 Producer Go
+  producer3:
+    build:
+      context: ./producer3
+    environment:
+      RABBIT_HOST: rabbitmq1
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🔵 Producer Go (segundo)
+  producer4:
+    build:
+      context: ./producer4
+    environment:
+      RABBIT_HOST: rabbitmq1
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🟡 Consumer Go
+  consumer3:
+    build:
+      context: ./consumer3
+    environment:
+      RABBIT_HOST: rabbitmq1
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🔵 Consumer Java
+  consumer4:
+    build:
+      context: ./consumer4
+    environment:
+      RABBIT_HOST: rabbitmq1
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+networks:
+  rabbitnet:
+    external: true

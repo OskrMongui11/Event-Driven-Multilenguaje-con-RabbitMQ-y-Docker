@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  # 🟡 Producer Python 1
+  producer1:
+    build:
+      context: ./producer
+    environment:
+      RABBIT_HOST: rabbitmq1   # Nombre del broker del Nodo 3
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🔵 Producer Python 2
+  producer2:
+    build:
+      context: ./producer2
+    environment:
+      RABBIT_HOST: rabbitmq1
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🟢 Consumer Python
+  consumer1:
+    build:
+      context: ./consumer
+    environment:
+      RABBIT_HOST: rabbitmq1
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+  # 🔴 Consumer Node.js
+  consumer2:
+    build:
+      context: ./consumer2
+    environment:
+      RABBIT_HOST: rabbitmq1
+      RABBIT_USER: user
+      RABBIT_PASS: password
+    restart: unless-stopped
+    networks:
+      - rabbitnet
+
+networks:
+  rabbitnet:
+    external: true
